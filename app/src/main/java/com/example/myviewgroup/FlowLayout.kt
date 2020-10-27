@@ -17,10 +17,10 @@ class FlowLayout:ViewGroup {
     //定义所有行中最长的长度
     private var maxWidth = 0
     //定义一个变量记录已经使用了多少宽度
-    var widthUsed = 0
+    var currentWidth = 0
     //定义一个变量记录当前行最大的高度
-    var maxHeight = 0
-    //定义一个数组保存所有的宽度
+    var currentHeight = 0
+    //定义一个变量保存所有的宽度
     private var totalHeight = 0
     //定义父容器的长度
     private var parentHeight = 0
@@ -30,6 +30,9 @@ class FlowLayout:ViewGroup {
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+        //获取父容器的最大宽高
+        val parentMaxWidth = MeasureSpec.getSize(widthMeasureSpec)
+        val parentMaxHeight = MeasureSpec.getSize(heightMeasureSpec)
         //确定子控件的measureSpec
         for(i in 0 until childCount){
             var child = getChildAt(i)
@@ -41,13 +44,34 @@ class FlowLayout:ViewGroup {
             var childHeightSpec = getChildMeasureSpec(heightMeasureSpec,2*space,lp.width)
             //测量每个子控件
             child.measure(childWidthSpec,childHeightSpec)
-        }
+            //在这一行添加
+            if(currentWidth+space+child.measuredWidth <= parentMaxWidth){
+                currentWidth+=child.measuredWidth+space
+                currentHeight = Math.max(currentHeight,child.measuredHeight)
+                everyLineViews.add(child)
+            }else{    //换到下一行
+                //将上一行的添加到保存所有View的数组中
+                allViews.add(everyLineViews)
+                //重置上每一行的数组  但是不能用清空 ，必须重新分配内存
+                everyLineViews = mutableListOf()
+                //将上一行的高度加到总的高度里面
+                totalHeight+=currentHeight
+                maxWidth = Math.max(maxWidth,currentWidth)
 
+                //进行下一行的初始化
+                currentHeight = child.measuredHeight
+                currentWidth = child.measuredWidth
+                everyLineViews.add(child)
+            }
+        }
+        //判断是否还有不满一行的控件没有被测量到
+        if(everyLineViews.size>0){
+            for (i in 0 until everyLineViews.size){
+                
+            }
+        }
     }
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        var left = 0
-        var top = 0
-        var right = 0
-        var bottom = 0
+
     }
 }
