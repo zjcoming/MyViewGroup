@@ -39,13 +39,14 @@ class FlowLayout:ViewGroup {
         //重新初始化（由于变量定义在外部）
         allViews = mutableListOf()
         everyLineViews = mutableListOf()
-        Log.v("aa","每一行的控件个数：${everyLineViews.size}")
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
         //获取父容器的最大宽高
         val parentMaxWidth = MeasureSpec.getSize(widthMeasureSpec)
         Log.v("zj","父容器最大宽度：${parentMaxWidth}")
-        val parentMaxHeight = MeasureSpec.getSize(heightMeasureSpec)
+        val parentMaxHeight = MeasureSpec.getSize(heightMeasureSpec)//不会用到，但还是写了
+
         //确定子控件的measureSpec
         for(i in 0 until childCount){
             var child = getChildAt(i)
@@ -58,57 +59,56 @@ class FlowLayout:ViewGroup {
             //测量每个子控件
             child.measure(childWidthSpec,childHeightSpec)
 
+
+            /**
+             * 流式布局最核心的算法
+             */
+
             //在这一行添加
             if(currentWidth+space+child.measuredWidth <= parentMaxWidth){
                 currentWidth+=child.measuredWidth+space
                 currentHeight = Math.max(currentHeight,(child.measuredHeight+space))
-                //everyLineViews.add(child)
             }else{    //换到下一行
+
                 //将上一行的添加到保存所有View的数组中
                 allViews.add(everyLineViews)
-                //重置上每一行的数组  但是不能用清空 ，必须重新分配内存
+                //重置上每一行的数组  但是不能用清空 ，必须重新分配内存（由于指针问题）
                 everyLineViews = mutableListOf()
                 //将上一行的高度加到总的高度里面
                 totalHeight+=currentHeight
-                //讲上一行的最大高度存到数组中
+                //将上一行的最大高度存到数组中
                 allLineHeightList.add(currentHeight)
                 maxWidth = Math.max(maxWidth,currentWidth)
-                //everyLineViews.add(child)
                 //进行下一行的初始化
-
                 currentHeight = child.measuredHeight+space
                 currentWidth = child.measuredWidth+space
             }
             //添加孩子到数组中
             everyLineViews.add(child)
-
         }
-        //判断是否还有不满一行的控件没有被测量到
+        //判断是否还有不满一行的控件没有被计算到
         if(everyLineViews.size!=0){
             currentWidth = 0
             currentHeight = 0
             for (i in 0 until everyLineViews.size){
-                Log.v("za","${everyLineViews.size}")      /////
+                //得到每个子控件
                 val child = getChildAt(i)
-
-                //Log.v("zj","${child.measuredWidth}")
+                //当前宽度等于余下的每个子控件的宽度加总 再加上 space间隔
                 currentWidth += child.measuredWidth+space
+                //当前这一行的高度就是这一个控件的高度+space与上一次保存的最大行高相比，谁大取谁
                 currentHeight = Math.max(currentHeight,child.measuredHeight+space)
-                Log.v("aa","这个子控件的宽度：${currentWidth}")
-                Log.v("aa","这个子控件的高度度：${currentHeight}")
             }
+            //余下的这一行的总宽度再与前面的n行的最长的比较，谁大取谁
             maxWidth = Math.max(maxWidth,currentWidth)
+            //算出总的高度
             totalHeight+=currentHeight
             allLineHeightList.add(currentHeight)
+            //将这一行添加到数组中
             allViews.add(everyLineViews)
-            Log.v("pp","第一行的个数：${everyLineViews.size}")
-            Log.v("pp","第一行的个数(allView)：${allViews[0].size}")
         }
+        //设置父容器的最终尺寸
         parentHeight = totalHeight+space
         parentWidth = maxWidth+space
-        Log.v("aa","设置的父控件宽度：${parentWidth}")
-        Log.v("aa","设置的父控件高度：${parentHeight}")
-        Log.v("aa","高度变化：${parentHeight}")
         setMeasuredDimension(parentWidth,parentHeight)
     }
 
@@ -120,7 +120,7 @@ class FlowLayout:ViewGroup {
         Log.v("aa","子控件的个数：${childCount}")
         Log.v(("aa"),"添加所有视图有几行：${allViews.size}")
         for (i in 0 until allViews.size){//得到每一行的控件
-            Log.v("aa","第${i+1}行控件个数：${allViews[i].size}")
+            //进入第一行的布局
             for(j in 0 until allViews[i].size){//得到每一行中的每个控件
                 val child = allViews[i][j]
                 right = left+child.measuredWidth
