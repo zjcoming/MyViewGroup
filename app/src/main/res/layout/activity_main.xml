@@ -12,42 +12,40 @@
         android:background="@color/colorPrimary">
 
         <View
-            android:layout_width="80dp"
-            android:layout_height="50dp"
-            android:background="@color/colorAccent"/>
-        <View
-            android:layout_width="120dp"
-            android:layout_height="50dp"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
             android:background="@color/colorAccent"/>
         <View
             android:layout_width="80dp"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:background="@color/colorAccent"/>
         <View
-            android:layout_width="120dp"
-            android:layout_height="50dp"
-            android:background="@color/colorAccent"/><View
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:background="@color/colorAccent"/>
-        <View
-            android:layout_width="120dp"
-            android:layout_height="50dp"
-            android:background="@color/colorAccent"/><View
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:background="@color/colorAccent"/>
-        <View
-            android:layout_width="120dp"
-            android:layout_height="50dp"
-            android:background="@color/colorAccent"/><View
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:background="@color/colorAccent"/>
-        <View
-            android:layout_width="120dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="60dp"
             android:background="@color/colorAccent"/>
+        <View
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:background="@color/colorAccent"/>
+        <View
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:background="@color/colorAccent"/>
+        <View
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:background="@color/colorAccent"/>
+        <View
+            android:layout_width="40dp"
+            android:layout_height="60dp"
+            android:background="@color/colorAccent"/>
+        <View
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:background="@color/colorAccent"/>
+
+
+
 
 
     </com.example.myviewgroup.FlowLayout>
