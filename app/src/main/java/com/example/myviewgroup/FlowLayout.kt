@@ -44,7 +44,6 @@ class FlowLayout:ViewGroup {
 
         //获取父容器的最大宽高
         val parentMaxWidth = MeasureSpec.getSize(widthMeasureSpec)
-        Log.v("zj","父容器最大宽度：${parentMaxWidth}")
         val parentMaxHeight = MeasureSpec.getSize(heightMeasureSpec)//不会用到，但还是写了
 
         //确定子控件的measureSpec
@@ -87,12 +86,12 @@ class FlowLayout:ViewGroup {
             everyLineViews.add(child)
         }
         //判断是否还有不满一行的控件没有被计算到
-        if(everyLineViews.size!=0){
+        if(everyLineViews.size>0){
             currentWidth = 0
             currentHeight = 0
             for (i in 0 until everyLineViews.size){
                 //得到每个子控件
-                val child = getChildAt(i)
+                val child = everyLineViews[i]
                 //当前宽度等于余下的每个子控件的宽度加总 再加上 space间隔
                 currentWidth += child.measuredWidth+space
                 //当前这一行的高度就是这一个控件的高度+space与上一次保存的最大行高相比，谁大取谁
@@ -101,7 +100,7 @@ class FlowLayout:ViewGroup {
             //余下的这一行的总宽度再与前面的n行的最长的比较，谁大取谁
             maxWidth = Math.max(maxWidth,currentWidth)
             //算出总的高度
-            totalHeight+=currentHeight
+            totalHeight += currentHeight
             allLineHeightList.add(currentHeight)
             //将这一行添加到数组中
             allViews.add(everyLineViews)
@@ -117,8 +116,6 @@ class FlowLayout:ViewGroup {
         var top = space
         var right = 0
         var bottom = 0
-        Log.v("aa","子控件的个数：${childCount}")
-        Log.v(("aa"),"添加所有视图有几行：${allViews.size}")
         for (i in 0 until allViews.size){//得到每一行的控件
             //进入第一行的布局
             for(j in 0 until allViews[i].size){//得到每一行中的每个控件
